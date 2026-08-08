@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Stargaze</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <header class="top-bar">
+
+        <h1>
+            Bienvenido {{ session["first_name"] }}
+        </h1>
+
+        <a href="/logout">
+            Cerrar Sesión
+        </a>
+
+    </header>
+
+
+    <main class="dashboard-container">
+
+        <section class="create-section">
+
+            <h2>
+                Crear Publicación
+            </h2>
+
+
+            {% with messages =
+                get_flashed_messages(
+                    category_filter=["publication"]
+                )
+            %}
+
+                {% if messages %}
+
+                    {% for message in messages %}
+
+                        <p class="error">
+                            {{ message }}
+                        </p>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endwith %}
+
+
+            <form
+                action="/publications/create"
+                method="POST"
+            >
+
+                <div class="form-group">
+
+                    <label>
+                        Nombre
+                    </label>
+
+                    <input
+                        type="text"
+                        name="name"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Descripción
+                    </label>
+
+                    <textarea
+                        name="description"
+                    ></textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Fecha
+                    </label>
+
+                    <input
+                        type="date"
+                        name="event_date"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Ubicación
+                    </label>
+
+                    <input
+                        type="text"
+                        name="location"
+                    >
+
+                </div>
+
+
+                <button type="submit">
+                    Crear
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <section class="publications-section">
+
+            <h2>
+                Publicaciones
+            </h2>
+
+            {% for publication in publications %}
+
+                <article class="publication-card">
+
+                    <h3>
+                        {{ publication.name }}
+                    </h3>
+
+                    <p>
+                        <strong>Publicado por:</strong>
+                        {{ publication.author_first_name }}
+                        {{ publication.author_last_name }}
+                    </p>
+
+                    <p>
+                        <strong>Fecha:</strong>
+                        {{ publication.event_date }}
+                    </p>
+
+                    <p>
+                        <strong>Ubicación:</strong>
+                        {{ publication.location }}
+                    </p>
+
+                    <p>
+                        {{ publication.description }}
+                    </p>
+
+                    <p>
+                        Me gusta:
+                        {{ publication.likes_count }}
+                    </p>
+
+
+                    {% if publication.user_id == session["user_id"] %}
+
+                        <a
+                            href="/publications/edit/{{ publication.id }}"
+                        >
+                            Editar
+                        </a>
+
+                        |
+
+                        <a
+                            href="/publications/delete/{{ publication.id }}"
+                        >
+                            Borrar
+                        </a>
+
+                    {% endif %}
+
+
+                    {% if not publication.user_liked %}
+
+                        |
+
+                        <a
+                            href="/publications/like/{{ publication.id }}"
+                        >
+                            Me gusta
+                        </a>
+
+                    {% endif %}
+
+                </article>
+
+            {% else %}
+
+                <p>
+                    No hay publicaciones todavía.
+                </p>
+
+            {% endfor %}
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
