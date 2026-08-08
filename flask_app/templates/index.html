@@ -7,7 +7,6 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
-
     <title>Stargaze</title>
     <link
         rel="stylesheet"
@@ -15,108 +14,115 @@
     >
 </head>
 
-<body>
-    <main class="auth-container">
-        <!-- REGISTRO -->
-        <section class="auth-section">
-            <h1>Registro</h1>
-            {% with messages =
-                get_flashed_messages(
-                    category_filter=["register"]
-                )
-            %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <p class="error">
-                            {{ message }}
-                        </p>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            <form
-                action="/register"
-                method="POST"
-            >
-                <div class="form-group">
-                    <label>Nombre</label>
-                    <input
-                        type="text"
-                        name="first_name"
-                    >
-                </div>
-                <div class="form-group">
-                    <label>Apellido</label>
-                    <input
-                        type="text"
-                        name="last_name"
-                    >
-                </div>
-                <div class="form-group">
-                    <label>E-mail</label>
-                    <input
-                        type="text"
-                        name="email"
-                    >
-                </div>
-                <div class="form-group">
-                    <label>Contraseña</label>
-                    <input
-                        type="password"
-                        name="password"
-                    >
-                </div>
-                <div class="form-group">
-                    <label>Conf. Contraseña</label>
-                    <input
-                        type="password"
-                        name="confirm_password"
-                    >
-                </div>
-                <button type="submit">
-                    Registrar
-                </button>
-            </form>
-        </section>
-
-
-        <!-- LOGIN -->
-        <section class="auth-section">
-            <h1>Inicio de Sesión</h1>
-            {% with messages =
-                get_flashed_messages(
-                    category_filter=["login"]
-                )
-            %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <p class="error">
-                            {{ message }}
-                        </p>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            <form
-                action="/login"
-                method="POST"
-                <div class="form-group">
-                    <label>E-mail</label>
-                    <input
-                        type="text"
-                        name="email"
-                    >
-                </div>
-                <div class="form-group">
-                    <label>Contraseña</label>
-                    <input
-                        type="password"
-                        name="password"
-                    >
-                </div>
-                <button type="submit">
-                    Iniciar Sesión
-                </button>
-            </form>
-        </section>
+<body class="auth-page">
+    <div class="sky-glow"></div>
+    <div class="orbit">
+        <span>✦</span>
+    </div>
+    <main class="auth-wrapper">
+        <header class="brand">
+            <h1>STARGAZE</h1>
+            <p>Cada noche guarda una historia.</p>
+        </header>
+        <div class="auth-container">
+            <section class="auth-section">
+                <h2>Registro</h2>
+                {% with messages =
+                    get_flashed_messages(
+                        category_filter=["register"]
+                    )
+                %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p class="error">
+                                {{ message }}
+                            </p>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                <form
+                    action="/register"
+                    method="POST"
+                >
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input
+                            type="text"
+                            name="first_name"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido</label>
+                        <input
+                            type="text"
+                            name="last_name"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input
+                            type="text"
+                            name="email"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input
+                            type="password"
+                            name="password"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmar contraseña</label>
+                        <input
+                            type="password"
+                            name="confirm_password"
+                        >
+                    </div>
+                    <button type="submit">
+                        Registrar
+                    </button>
+                </form>
+            </section>
+            <section class="auth-section">
+                <h2>Inicio de Sesión</h2>
+                {% with messages =
+                    get_flashed_messages(
+                        category_filter=["login"]
+                    )
+                %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p class="error">
+                                {{ message }}
+                            </p>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                <form
+                    action="/login"
+                    method="POST"
+                >
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input
+                            type="text"
+                            name="email"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input
+                            type="password"
+                            name="password"
+                        >
+                    </div>
+                    <button type="submit">
+                        Iniciar Sesión
+                    </button>
+                </form>
+            </section>
+        </div>
     </main>
 </body>
 

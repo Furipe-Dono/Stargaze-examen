@@ -3,219 +3,168 @@
 
 <head>
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
-
     <title>Stargaze</title>
-
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/style.css') }}"
     >
 </head>
 
-<body>
-
+<body class="app-page">
+    <div class="sky-glow"></div>
+    <div class="orbit">
+        <span>✦</span>
+    </div>
     <header class="top-bar">
-
-        <h1>
-            Bienvenido {{ session["first_name"] }}
-        </h1>
-
+        <div>
+            <p class="eyebrow">STARGAZE</p>
+            <h1>
+                Bienvenido {{ session["first_name"] }}
+            </h1>
+        </div>
         <a href="/logout">
             Cerrar Sesión
         </a>
-
     </header>
-
-
     <main class="dashboard-container">
-
         <section class="create-section">
-
-            <h2>
-                Crear Publicación
-            </h2>
-
-
+            <h2>Nueva publicación</h2>
+            <p class="section-intro">
+                Registra una nueva observación astronómica.
+            </p>
             {% with messages =
                 get_flashed_messages(
                     category_filter=["publication"]
                 )
             %}
-
                 {% if messages %}
-
                     {% for message in messages %}
-
                         <p class="error">
                             {{ message }}
                         </p>
-
                     {% endfor %}
-
                 {% endif %}
-
             {% endwith %}
-
-
             <form
                 action="/publications/create"
                 method="POST"
             >
-
                 <div class="form-group">
-
-                    <label>
-                        Nombre
-                    </label>
-
+                    <label>Nombre de estrella o constelación</label>
                     <input
                         type="text"
                         name="name"
+                        placeholder="Ej. Venus"
                     >
-
                 </div>
-
-
                 <div class="form-group">
-
-                    <label>
-                        Descripción
-                    </label>
-
+                    <label>Descripción del encuentro</label>
                     <textarea
                         name="description"
+                        placeholder="Describe tu observación..."
                     ></textarea>
-
                 </div>
-
-
                 <div class="form-group">
-
-                    <label>
-                        Fecha
-                    </label>
-
+                    <label>Fecha del evento</label>
                     <input
                         type="date"
                         name="event_date"
                     >
-
                 </div>
-
-
                 <div class="form-group">
-
-                    <label>
-                        Ubicación
-                    </label>
-
+                    <label>Lugar del evento</label>
                     <input
                         type="text"
                         name="location"
+                        placeholder="Ej. Cerro El Cuchillo"
                     >
-
                 </div>
-
-
                 <button type="submit">
-                    Crear
+                    Compartir observación
                 </button>
-
             </form>
-
         </section>
-
-
         <section class="publications-section">
-
-            <h2>
-                Publicaciones
-            </h2>
-
+            <div class="section-heading">
+                <p class="eyebrow">ARCHIVO CELESTE</p>
+                <h2>Todas las observaciones de estrellas</h2>
+            </div>
             {% for publication in publications %}
-
                 <article class="publication-card">
-
-                    <h3>
-                        {{ publication.name }}
-                    </h3>
-
-                    <p>
-                        <strong>Publicado por:</strong>
-                        {{ publication.author_first_name }}
-                        {{ publication.author_last_name }}
-                    </p>
-
-                    <p>
-                        <strong>Fecha:</strong>
-                        {{ publication.event_date }}
-                    </p>
-
-                    <p>
-                        <strong>Ubicación:</strong>
-                        {{ publication.location }}
-                    </p>
-
-                    <p>
+                    <div class="publication-header">
+                        <div>
+                            <p class="publication-kicker">
+                                Registro astronómico
+                            </p>
+                            <h3>
+                                {{ publication.name }}
+                            </h3>
+                        </div>
+                        <div class="publication-actions">
+                            {% if publication.user_id == session["user_id"] %}
+                                <a
+                                    href="/publications/edit/{{ publication.id }}"
+                                >
+                                    Editar
+                                </a>
+                                <a
+                                    href="/publications/delete/{{ publication.id }}"
+                                >
+                                    Borrar
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="publication-meta">
+                        <span>
+                            <strong>Observador:</strong>
+                            {{ publication.author_first_name }}
+                            {{ publication.author_last_name }}
+                        </span>
+                        <span>
+                            <strong>Fecha:</strong>
+                            {{ publication.event_date }}
+                        </span>
+                        <span>
+                            <strong>Lugar:</strong>
+                            {{ publication.location }}
+                        </span>
+                    </div>
+                    <p class="publication-description">
                         {{ publication.description }}
                     </p>
-
-                    <p>
-                        Me gusta:
-                        {{ publication.likes_count }}
-                    </p>
-
-
-                    {% if publication.user_id == session["user_id"] %}
-
-                        <a
-                            href="/publications/edit/{{ publication.id }}"
-                        >
-                            Editar
-                        </a>
-
-                        |
-
-                        <a
-                            href="/publications/delete/{{ publication.id }}"
-                        >
-                            Borrar
-                        </a>
-
-                    {% endif %}
-
-
-                    {% if not publication.user_liked %}
-
-                        |
-
-                        <a
-                            href="/publications/like/{{ publication.id }}"
-                        >
-                            Me gusta
-                        </a>
-
-                    {% endif %}
-
+                    <div class="likes-bar">
+                        <span>
+                            Me gusta:
+                            <strong>
+                                {{ publication.likes_count }}
+                            </strong>
+                        </span>
+                        {% if not publication.user_liked %}
+                            <a
+                                class="btn btn-copper"
+                                href="/publications/like/{{ publication.id }}"
+                            >
+                                Me gusta
+                            </a>
+                        {% endif %}
+                    </div>
                 </article>
-
             {% else %}
-
-                <p>
-                    No hay publicaciones todavía.
-                </p>
-
+                <div class="empty-state">
+                    <h3>Aún no hay observaciones</h3>
+                    <p>
+                        La noche sigue ahí afuera, dramáticamente
+                        disponible.
+                    </p>
+                </div>
             {% endfor %}
-
         </section>
-
     </main>
-
 </body>
 
 </html>
